@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Científica Integrada de Cálculos Químicos Profissionais</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <h1>Plataforma Científica Integrada de Cálculos Químicos</h1>
+            <button id="theme-toggle" class="btn btn-secondary">Alternar Tema 🌓</button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#tab-periodic-table" class="nav-link active">Tabela Periódica Interativa</a></li>
+                <li><a href="#tab-molar-mass" class="nav-link">Módulo 1: Massa Molar & Parser</a></li>
+                <li><a href="#tab-solutions" class="nav-link">Módulos 2-6: Soluções & Diluição</a></li>
+                <li><a href="#tab-stoichiometry" class="nav-link">Módulos 7-11: Estequiometria & Reações</a></li>
+                <li><a href="#tab-isotopes" class="nav-link">Módulo 12: Isótopos</a></li>
+                <li><a href="#tab-density" class="nav-link">Módulos 13-14: Densidade & Conversão</a></li>
+                <li><a href="#tab-ph" class="nav-link">Módulo 15: Equilíbrio Ácido-Base (pH)</a></li>
+                <li><a href="#tab-kinetics" class="nav-link">Módulo 16: Cinética Química</a></li>
+                <li><a href="#tab-thermo" class="nav-link">Módulo 17: Termodinâmica</a></li>
+                <li><a href="#tab-conversions" class="nav-link">Módulo 18: Unidades & Avogadro</a></li>
+                <li><a href="#tab-history" class="nav-link">Módulos 19-21: Histórico & Gráficos</a></li>
+            </ul>
+        </nav>
+
+        <main class="content-area">
+            
+            <section id="tab-periodic-table" class="tab-content active">
+                <h2>Tabela Periódica Interativa Completa (IUPAC)</h2>
+                <p class="instruction">Clique em qualquer elemento para visualizar suas propriedades termodinâmicas, quânticas e físicas detalhadas.</p>
+                <div class="periodic-table-container">
+                    <div id="periodic-table-grid" class="periodic-grid"></div>
+                </div>
+                <div id="element-detail-card" class="card element-detail-card hidden">
+                    <h3>Detalhes do Elemento: <span id="detail-name">-</span></h3>
+                    <div class="detail-grid">
+                        <p><strong>Símbolo:</strong> <span id="detail-symbol">-</span></p>
+                        <p><strong>Número Atômico:</strong> <span id="detail-atomic-number">-</span></p>
+                        <p><strong>Massa Atômica:</strong> <span id="detail-atomic-mass">-</span> u</p>
+                        <p><strong>Grupo / Período:</strong> <span id="detail-group-period">-</span></p>
+                        <p><strong>Categoria:</strong> <span id="detail-category">-</span></p>
+                        <p><strong>Estado Físico:</strong> <span id="detail-state">-</span></p>
+                        <p><strong>Eletronegatividade:</strong> <span id="detail-electronegativity">-</span></p>
+                        <p><strong>Raio Atômico:</strong> <span id="detail-radius">-</span> pm</p>
+                        <p><strong>Configuração Eletrônica:</strong> <span id="detail-config">-</span></p>
+                        <p><strong>Energia de Ionização:</strong> <span id="detail-ion-energy">-</span> kJ/mol</p>
+                        <p><strong>Ano de Descoberta:</strong> <span id="detail-discovery">-</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-molar-mass" class="tab-content">
+                <h2>Módulo 1: Parser Químico Profissional (Massa Molar)</h2>
+                <div class="card">
+                    <div class="form-group">
+                        <label for="input-formula">Fórmula Química (Suporta parênteses, colchetes, hidratos como CuSO4·5H2O e íons):</label>
+                        <input type="text" id="input-formula" class="form-control" placeholder="Ex: K4[Fe(CN)6] ou MgSO4·7H2O">
+                    </div>
+                    <button id="btn-calc-molar-mass" class="btn btn-primary">Analisar e Calcular</button>
+                    <div id="molar-mass-results" class="results-box hidden">
+                        <h3>Resultados da Análise</h3>
+                        <p><strong>Massa Molar / Molecular:</strong> <span id="res-molar-mass">0</span> g/mol (u)</p>
+                        <h4>Composição Elementar Percentual:</h4>
+                        <table id="table-composition" class="data-table">
+                            <thead>
+                                <tr><th>Elemento</th><th>Quantidade</th><th>Massa Parcial (g/mol)</th><th>Porcentagem (%)</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <h4>Detalhamento do Passo a Passo do Parser:</h4>
+                        <div id="parser-steps" class="steps-log"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-solutions" class="tab-content">
+                <h2>Módulos 2 ao 6: Engenharia de Soluções e Diluições</h2>
+                
+                <div class="card">
+                    <h3>Molaridade (M), Normalidade (N) e PPM/PPB</h3>
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label for="sol-formula">Fórmula do Soluto:</label>
+                            <input type="text" id="sol-formula" class="form-control" placeholder="Ex: NaOH">
+                        </div>
+                        <div class="form-group">
+                            <label for="sol-mass">Massa do Soluto (g):</label>
+                            <input type="number" id="sol-mass" class="form-control" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="sol-volume">Volume da Solução (L):</label>
+                            <input type="number" id="sol-volume" class="form-control" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="sol-valencia">Fator de Equivalência / Valência (para Normalidade):</label>
+                            <input type="number" id="sol-valencia" class="form-control" value="1" min="1">
+                        </div>
+                    </div>
+                    <button id="btn-calc-solutions" class="btn btn-primary">Calcular Propriedades da Solução</button>
+                    <div id="solution-results" class="results-box hidden">
+                        <p><strong>Molaridade:</strong> <span id="res-sol-molaridade">-</span> mol/L</p>
+                        <p><strong>Concentração Comum:</strong> <span id="res-sol-g-l">-</span> g/L</p>
+                        <p><strong>Normalidade:</strong> <span id="res-sol-normalidade">-</span> N</p>
+                        <p><strong>Partes por Milhão (PPM):</strong> <span id="res-sol-ppm">-</span> mg/L</p>
+                        <p><strong>Partes por Bilhão (PPB):</strong> <span id="res-sol-ppb">-</span> µg/L</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Módulo 5: Preparação de Soluções com Geração de Procedimento Técnico</h3>
+                    <div class="grid-3col">
+                        <div class="form-group">
+                            <label for="prep-formula">Fórmula:</label>
+                            <input type="text" id="prep-formula" class="form-control" placeholder="H2SO4">
+                        </div>
+                        <div class="form-group">
+                            <label for="prep-vol-ml">Volume Desejado (mL):</label>
+                            <input type="number" id="prep-vol-ml" class="form-control" placeholder="500">
+                        </div>
+                        <div class="form-group">
+                            <label for="prep-molaridade">Molaridade Alvo (mol/L):</label>
+                            <input type="number" id="prep-molaridade" class="form-control" placeholder="0.1" step="any">
+                        </div>
+                    </div>
+                    <button id="btn-generate-prep" class="btn btn-primary">Gerar Protocolo Laboratorial</button>
+                    <div id="prep-procedure-box" class="results-box hidden">
+                        <h4>Massa Necessária Calculada: <span id="prep-res-mass">0</span> g</h4>
+                        <pre id="prep-procedure-text" class="procedure-log"></pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Módulo 6: Diluição de Soluções ($C_1V_1 = C_2V_2$)</h3>
+                    <p class="instruction">Deixe exatamente UM campo em branco para calcular o seu valor automaticamente.</p>
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label for="dil-c1">Concentração Inicial ($C_1$):</label>
+                            <input type="number" id="dil-c1" class="form-control" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="dil-v1">Volume Inicial ($V_1$):</label>
+                            <input type="number" id="dil-v1" class="form-control" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="dil-c2">Concentração Final ($C_2$):</label>
+                            <input type="number" id="dil-c2" class="form-control" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="dil-v2">Volume Final ($V_2$):</label>
+                            <input type="number" id="dil-v2" class="form-control" step="any">
+                        </div>
+                    </div>
+                    <button id="btn-calc-dilution" class="btn btn-primary">Resolver Diluição</button>
+                    <div id="dilution-result" class="results-box hidden">
+                        <p><strong>Resultado do Campo Calculado:</strong> <span id="res-dilution-val">-</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-stoichiometry" class="tab-content">
+                <h2>Módulos 7 ao 11: Balanceamento de Reações & Estequiometria</h2>
+                
+                <div class="card">
+                    <h3>Balanceamento Matricial Automático</h3>
+                    <div class="form-group">
+                        <label for="input-equation">Equação Química (Use letras maiúsculas/minúsculas corretas, separe por + e → ou =):</label>
+                        <input type="text" id="input-equation" class="form-control" placeholder="Ex: H2 + O2 -> H2O ou C6H12O6 + O2 -> CO2 + H2O">
+                    </div>
+                    <button id="btn-balance-equation" class="btn btn-primary">Executar Balanceamento Linear</button>
+                    <div id="balance-results" class="results-box hidden">
+                        <p><strong>Equação Balanceada:</strong> <span id="res-balanced-eq" class="scientific-text">-</span></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Cálculos Avançados de Reação: Reagente Limitante, Excesso, Pureza e Rendimento</h3>
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label for="st-eq">Equação Balanceada de Trabalho:</label>
+                            <input type="text" id="st-eq" class="form-control" placeholder="Ex: 2 H2 + 1 O2 -> 2 H2O">
+                        </div>
+                    </div>
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label for="st-mass-r1">Massa Inserida Reagente 1 (g):</label>
+                            <input type="number" id="st-mass-r1" class="form-control" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="st-pureza-r1">Pureza Reagente 1 (%):</label>
+                            <input type="number" id="st-pureza-r1" class="form-control" value="100" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="st-mass-r2">Massa Inserida Reagente 2 (g) (Deixe vazio se for reagente único):</label>
+                            <input type="number" id="st-mass-r2" class="form-control" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="st-pureza-r2">Pureza Reagente 2 (%):</label>
+                            <input type="number" id="st-pureza-r2" class="form-control" value="100" step="any">
+                        </div>
+                    </div>
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label for="st-prod-exp">Massa Experimental Obtida do Primeiro Produto (g):</label>
+                            <input type="number" id="st-prod-exp" class="form-control" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="st-rendimento">Rendimento Esperado de Reação (%):</label>
+                            <input type="number" id="st-rendimento" class="form-control" value="100" step="any">
+                        </div>
+                    </div>
+                    <button id="btn-calc-stoich" class="btn btn-primary">Processar Análise Estequiométrica</button>
+                    
+                    <div id="stoich-results" class="results-box hidden">
+                        <h4>Resultados da Análise Industrial</h4>
+                        <p><strong>Reagente Limitante:</strong> <span id="res-st-limitante">-</span></p>
+                        <p><strong>Reagente em Excesso:</strong> <span id="res-st-excesso">-</span></p>
+                        <p><strong>Massa Teórica Máxima do Produto:</strong> <span id="res-st-teorica">0</span> g</p>
+                        <p><strong>Massa do Produto Corrigida pelo Rendimento Comercial:</strong> <span id="res-st-corrigida">0</span> g</p>
+                        <p><strong>Rendimento Real Calculado do Processo:</strong> <span id="res-st-rendimento-real">0</span> %</p>
+                        <p><strong>Eficiência Estequiométrica Geral:</strong> <span id="res-st-eficiencia">-</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-isotopes" class="tab-content">
+                <h2>Módulo 12: Espectrometria de Massa & Cálculos Isotópicos</h2>
+                <div class="card">
+                    <p class="instruction">Selecione o sistema elementar para analisar as abundâncias naturais e calcular a massa atômica ponderada média.</p>
+                    <div class="form-group">
+                        <label for="isotope-select">Elemento Alvo:</label>
+                        <select id="isotope-select" class="form-control">
+                            <option value="H">Hidrogênio (¹H, ²H, ³H)</option>
+                            <option value="C">Carbono (¹²C, ¹³C, ¹⁴C)</option>
+                            <option value="O">Oxigênio (¹⁶O, ¹⁷O, ¹⁸O)</option>
+                        </select>
+                    </div>
+                    <button id="btn-calc-isotopes" class="btn btn-primary">Calcular Massa Média Ponderada</button>
+                    <div id="isotope-results" class="results-box hidden">
+                        <p><strong>Massa Atômica Média Calculada:</strong> <span id="res-isotope-mass">-</span> u</p>
+                        <div class="chart-container-small">
+                            <canvas id="isotopeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-density" class="tab-content">
+                <h2>Módulos 13 e 14: Densidade e Conversão de Grandezas Reais</h2>
+                <div class="card">
+                    <div class="grid-3col">
+                        <div class="form-group">
+                            <label for="dens-massa">Massa:</label>
+                            <input type="number" id="dens-massa" class="form-control" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="dens-volume">Volume:</label>
+                            <input type="number" id="dens-volume" class="form-control" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="dens-densidade">Densidade:</label>
+                            <input type="number" id="dens-densidade" class="form-control" step="any">
+                        </div>
+                    </div>
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label for="dens-unidade-massa">Unidade de Massa:</label>
+                            <select id="dens-unidade-massa" class="form-control">
+                                <option value="g">Gramas (g)</option>
+                                <option value="kg">Quilos (kg)</option>
+                                <option value="mg">Miligramas (mg)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dens-unidade-vol">Unidade de Volume:</label>
+                            <select id="dens-unidade-vol" class="form-control">
+                                <option value="mL">Mililitros (mL / cm³)</option>
+                                <option value="L">Litros (L)</option>
+                                <option value="m3">Metros Cúbicos (m³)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="btn-calc-density" class="btn btn-primary">Calcular Variável Faltante</button>
+                    <div id="density-results" class="results-box hidden">
+                        <p><strong>Densidade Calculada:</strong></p>
+                        <ul>
+                            <li><span id="res-dens-g-cm3">0</span> g/cm³ (g/mL)</li>
+                            <li><span id="res-dens-kg-m3">0</span> kg/m³</li>
+                        </ul>
+                        <p><strong>Massa Convertida:</strong> <span id="res-dens-massa-final">0</span> g</p>
+                        <p><strong>Volume Convertido:</strong> <span id="res-dens-vol-final">0</span> mL</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-ph" class="tab-content">
+                <h2>Módulo 15: Equilíbrio Iônico e Soluções Ácido-Base Fortes</h2>
+                <div class="card">
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label for="ph-tipo">Natureza do Soluto:</label>
+                            <select id="ph-tipo" class="form-control">
+                                <option value="acido">Ácido Forte (Libera $H^+$)</option>
+                                <option value="base">Base Forte (Libera $OH^-$)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ph-concentracao">Concentração Iônica da Solução (mol/L):</label>
+                            <input type="number" id="ph-concentracao" class="form-control" step="any" placeholder="Ex: 0.01">
+                        </div>
+                    </div>
+                    <button id="btn-calc-ph" class="btn btn-primary">Resolver Equilíbrio Iônico</button>
+                    <div id="ph-results" class="results-box hidden">
+                        <p><strong>pH Químico:</strong> <span id="res-ph-val">0</span></p>
+                        <p><strong>pOH Químico:</strong> <span id="res-poh-val">0</span></p>
+                        <p><strong>Concentração Hidrogênionica $[H^+]$:</strong> <span id="res-h-val">0</span> mol/L</p>
+                        <p><strong>Concentração Hidroxilídica $[OH^-]$:</strong> <span id="res-oh-val">0</span> mol/L</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-kinetics" class="tab-content">
+                <h2>Módulo 16: Cinética Química e Decaimento de Reações</h2>
+                <div class="card">
+                    <div class="grid-3col">
+                        <div class="form-group">
+                            <label for="kin-c0">Concentração Inicial ($A_0$):</label>
+                            <input type="number" id="kin-c0" class="form-control" value="1.0" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="kin-k">Constante de Velocidade ($k$):</label>
+                            <input type="number" id="kin-k" class="form-control" value="0.05" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="kin-ordem">Ordem da Reação:</label>
+                            <select id="kin-ordem" class="form-control">
+                                <option value="0">Ordem Zero</option>
+                                <option value="1">Primeira Ordem</option>
+                                <option value="2">Segunda Ordem</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="btn-calc-kinetics" class="btn btn-primary">Simular Decaimento Cinético</button>
+                    <div id="kinetics-results" class="results-box hidden">
+                        <p><strong>Tempo de Meia-vida ($t_{1/2}$):</strong> <span id="res-kin-meiavida">0</span> unidades de tempo</p>
+                        <div class="chart-container">
+                            <canvas id="kineticsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-thermo" class="tab-content">
+                <h2>Módulo 17: Termodinâmica Química & Energia de Gibbs</h2>
+                <div class="card">
+                    <div class="grid-3col">
+                        <div class="form-group">
+                            <label for="th-h">Variação de Entalpia ($\Delta H$, kJ/mol):</label>
+                            <input type="number" id="th-h" class="form-control" placeholder="Ex: -92.2" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="th-s">Variação de Entropia ($\Delta S$, J/mol·K):</label>
+                            <input type="number" id="th-s" class="form-control" placeholder="Ex: -198.7" step="any">
+                        </div>
+                        <div class="form-group">
+                            <label for="th-t">Temperatura Absoluta ($T$, Kelvin):</label>
+                            <input type="number" id="th-t" class="form-control" value="298.15" step="any">
+                        </div>
+                    </div>
+                    <button id="btn-calc-thermo" class="btn btn-primary">Calcular Espontaneidade</button>
+                    <div id="thermo-results" class="results-box hidden">
+                        <p><strong>Energia Livre de Gibbs ($\Delta G$):</strong> <span id="res-th-g">0</span> kJ/mol</p>
+                        <p><strong>Espontaneidade do Processo:</strong> <span id="res-th-espontaneo">-</span></p>
+                        <p><strong>Constante de Equilíbrio Prevista ($K_{eq}$):</strong> <span id="res-th-keq">-</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-conversions" class="tab-content">
+                <h2>Módulo 18: Conversões Quânticas e Constante de Avogadro</h2>
+                <div class="card">
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label for="conv-val">Valor Numérico de Entrada:</label>
+                            <input type="number" id="conv-val" class="form-control" step="any" placeholder="1.0">
+                        </div>
+                        <div class="form-group">
+                            <label for="conv-tipo">Direção da Conversão:</label>
+                            <select id="conv-tipo" class="form-control">
+                                <option value="mol-part">Mols ➔ Partículas / Moléculas</option>
+                                <option value="part-mol">Partículas / Moléculas ➔ Mols</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="btn-calc-conv" class="btn btn-primary">Processar Conversão Química</button>
+                    <div id="conv-results" class="results-box hidden">
+                        <p><strong>Resultado Convertido:</strong> <span id="res-conv-final">-</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-history" class="tab-content">
+                <h2>Módulos 19, 20 e 21: Histórico de Auditoria e Exportação</h2>
+                <div class="card">
+                    <div class="export-actions">
+                        <button id="btn-exp-pdf" class="btn btn-danger">Exportar Relatório em PDF</button>
+                        <button id="btn-exp-xlsx" class="btn btn-success">Exportar Planilha Excel (XLSX)</button>
+                        <button id="btn-exp-csv" class="btn btn-info">Exportar CSV</button>
+                        <button id="btn-exp-txt" class="btn btn-secondary">Exportar Histórico TXT</button>
+                        <button id="btn-clear-history" class="btn btn-danger" style="background-color: var(--danger-color);">Limpar Banco de Dados</button>
+                    </div>
+                    <div class="history-table-container">
+                        <table id="table-history-log" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data / Hora</th>
+                                    <th>Módulo Operacional</th>
+                                    <th>Dados de Entrada</th>
+                                    <th>Resultado Técnico Obtido</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="main-footer">
+        <p>Desenvolvido por <strong>EDCELLTECH</strong> &copy; 2026. Plataforma Offline de Computação Química de Alto Desempenho.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

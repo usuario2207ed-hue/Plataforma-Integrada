@@ -1,0 +1,322 @@
+/* DESIGN SYSTEM AVANÇADO - PLATAFORMA QUÍMICA CIENTÍFICA */
+:root {
+    --bg-primary: #f4f6f9;
+    --bg-secondary: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --accent-color: #0f766e;
+    --accent-hover: #115e59;
+    --border-color: #cbd5e1;
+    --danger-color: #b91c1c;
+    --success-color: #15803d;
+    --info-color: #0369a1;
+    --grid-element-bg: #e2e8f0;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-color: #2dd4bf;
+    --accent-hover: #14b8a6;
+    --border-color: #334155;
+    --grid-element-bg: #334155;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vi;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* HEADER */
+.main-header {
+    background-color: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
+    padding: 1rem 2rem;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.main-header h1 {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+}
+
+/* CONTAINER LAYOUT */
+.main-layout {
+    display: flex;
+    flex: 1;
+    max-width: 100%;
+}
+
+/* SIDEBAR NAVEGAÇÃO */
+.sidebar {
+    width: 280px;
+    background-color: var(--bg-secondary);
+    border-right: 2px solid var(--border-color);
+    padding: 1rem;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar .nav-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.sidebar .nav-link:hover, .sidebar .nav-link.active {
+    background-color: var(--accent-color);
+    color: #ffffff !important;
+}
+
+/* CONTEÚDO PRINCIPAL */
+.content-area {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* COMPONENTES CARD */
+.card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-color);
+}
+
+h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.25rem;
+}
+
+.instruction {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+/* FORMULÁRIOS */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.65rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    outline: 2px solid var(--accent-color);
+}
+
+/* BOTÕES */
+.btn {
+    display: inline-block;
+    padding: 0.65rem 1.25rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+}
+
+.btn-primary { background-color: var(--accent-color); color: white; }
+.btn-primary:hover { background-color: var(--accent-hover); }
+.btn-secondary { background-color: var(--text-secondary); color: white; }
+.btn-danger { background-color: var(--danger-color); color: white; }
+.btn-success { background-color: var(--success-color); color: white; }
+.btn-info { background-color: var(--info-color); color: white; }
+
+/* TABELA PERIODICA GRID */
+.periodic-table-container {
+    overflow-x: auto;
+    padding: 1rem 0;
+}
+
+.periodic-grid {
+    display: grid;
+    grid-template-columns: repeat(18, minmax(60px, 1fr));
+    gap: 4px;
+    min-width: 1100px;
+}
+
+.element-cell {
+    background-color: var(--grid-element-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 6px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.element-cell:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 10;
+}
+
+.cell-num { font-size: 0.7rem; text-align: left; color: var(--text-secondary); }
+.cell-sym { font-size: 1.2rem; font-weight: bold; }
+.cell-name { font-size: 0.65rem; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+
+/* CATEGORIAS DOS ELEMENTOS */
+.cat-nonmetal { border-left: 4px solid #10b981; }
+.cat-noble { border-left: 4px solid #a855f7; }
+.cat-alkali { border-left: 4px solid #ef4444; }
+.cat-alkaline { border-left: 4px solid #f97316; }
+.cat-metalloid { border-left: 4px solid #eab308; }
+.cat-halogen { border-left: 4px solid #06b6d4; }
+.cat-transition { border-left: 4px solid #3b82f6; }
+.cat-lanthanide { border-left: 4px solid #ec4899; }
+.cat-actinide { border-left: 4px solid #f43f5e; }
+.cat-post-transition { border-left: 4px solid #64748b; }
+
+/* ELEMENT CARD DETALHES */
+.element-detail-card {
+    border-top: 4px solid var(--accent-color);
+}
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+/* CAIXAS DE RESULTADOS */
+.results-box {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    background-color: var(--bg-primary);
+    border-left: 4px solid var(--accent-color);
+    border-radius: 4px;
+}
+
+.hidden { display: none !important; }
+
+/* TABELAS DE DADOS */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.data-table th, .data-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    background-color: var(--grid-element-bg);
+    font-weight: 600;
+}
+
+/* GRIDS FLEXÍVEIS */
+.grid-2col { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.grid-3col { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+
+/* LOGS TÉCNICOS */
+.steps-log, .procedure-log {
+    background-color: #0f172a;
+    color: #38bdf8;
+    padding: 1rem;
+    border-radius: 6px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    margin-top: 0.5rem;
+    white-space: pre-wrap;
+}
+
+/* CONTAINER GRÁFICOS */
+.chart-container { position: relative; height: 320px; width: 100%; margin-top: 1rem; }
+.chart-container-small { position: relative; height: 240px; width: 100%; max-width: 500px; margin: 1rem auto; }
+
+/* AÇÕES EXPORTAÇÃO */
+.export-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.history-table-container {
+    overflow-x: auto;
+}
+
+/* RODAPÉ */
+.main-footer {
+    background-color: var(--bg-secondary);
+    border-top: 2px solid var(--border-color);
+    text-align: center;
+    padding: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* RESPONSIVIDADE INTERFACES */
+@media(max-width: 992px) {
+    .main-layout { flex-direction: column; }
+    .sidebar { width: 100%; border-right: none; border-bottom: 2px solid var(--border-color); }
+}
